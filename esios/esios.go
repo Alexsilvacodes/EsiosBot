@@ -8,8 +8,6 @@ import (
 
 const BaseURL = "https://api.esios.ree.es/archives/70/download_json?locale=es"
 
-// const BaseURL = "https://api.coinbase.com/v2/"
-
 var myClient = &http.Client{Timeout: 10 * time.Second}
 
 func GetJson(url string, target interface{}) error {

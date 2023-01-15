@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/Alexsilvacodes/EsiosBot/esios"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 )
 
@@ -38,14 +38,12 @@ func main() {
 		panic(err) // You should add better error handling than this!
 	}
 
-	bot.Debug = true // Has the library display every request and response.
-
 	log.Printf("Started '%s'", bot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	updates, _ := bot.GetUpdatesChan(u)
+	updates := bot.GetUpdatesChan(u)
 
 	for update := range updates {
 		if update.Message == nil && update.CallbackQuery == nil {
@@ -55,7 +53,7 @@ func main() {
 		if update.Message != nil {
 			switch update.Message.Text {
 			case "/start":
-				bot.DeleteMessage(tgbotapi.DeleteMessageConfig{
+				bot.Request(tgbotapi.DeleteMessageConfig{
 					ChatID:    update.Message.Chat.ID,
 					MessageID: update.Message.MessageID,
 				})
@@ -67,7 +65,7 @@ func main() {
 
 				sendMessage(msg, bot)
 			case "/precios_pico":
-				bot.DeleteMessage(tgbotapi.DeleteMessageConfig{
+				bot.Request(tgbotapi.DeleteMessageConfig{
 					ChatID:    update.Message.Chat.ID,
 					MessageID: update.Message.MessageID,
 				})
@@ -110,7 +108,7 @@ func main() {
 
 				sendMessage(msg, bot)
 			case "/precios_hora":
-				bot.DeleteMessage(tgbotapi.DeleteMessageConfig{
+				bot.Request(tgbotapi.DeleteMessageConfig{
 					ChatID:    update.Message.Chat.ID,
 					MessageID: update.Message.MessageID,
 				})
