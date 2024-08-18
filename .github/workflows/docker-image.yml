@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: 'Build and Push'
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     defaults:
       run:
