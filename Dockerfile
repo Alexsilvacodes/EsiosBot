@@ -1,13 +1,13 @@
-FROM golang:1.19-alpine3.17
+FROM golang:alpine AS builder
 
-RUN apk add --no-cache git
+ARG VERSION=dev
 
-WORKDIR /app/esios
+WORKDIR /go/src/app
+COPY main.go .
+RUN go build -o main -ldflags=-X=main.version=${VERSION} main.go 
 
-COPY go.mod .
+FROM debian:latest
+COPY --from=builder /go/src/app/main /go/bin/main
+ENV PATH="/go/bin:${PATH}"
+CMD ["main"]
 
-RUN go mod download
-
-COPY . .
-
-ENTRYPOINT ["go", "run", "main.go"]
