@@ -1,16 +1,8 @@
-FROM golang:alpine AS builder
+FROM golang:alpine AS build
+WORKDIR /go/src/myapp
+COPY . .
+RUN go build -o /go/bin/myapp main.go
 
-ARG VERSION=dev
-
-WORKDIR /go/src/app
-COPY main.go .
-COPY go.mod .
-COPY go.sum .
-COPY esios .
-RUN go build -o main -ldflags=-X=main.version=${VERSION} main.go 
-
-FROM debian:latest
-COPY --from=builder /go/src/app/main /go/bin/main
-ENV PATH="/go/bin:${PATH}"
-CMD ["main"]
-
+FROM scratch
+COPY --from=build /go/bin/myapp /go/bin/myapp
+ENTRYPOINT ["/go/bin/myapp"]
