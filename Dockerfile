@@ -4,6 +4,7 @@ ARG VERSION=dev
 
 WORKDIR /go/src/app
 COPY main.go .
+COPY go.mod .
 RUN go build -o main -ldflags=-X=main.version=${VERSION} main.go 
 
 FROM debian:latest
